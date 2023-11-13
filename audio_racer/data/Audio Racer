@@ -1,0 +1,9 @@
+Driving
+Y	forward	3	SLIDER	Z Rotation	0	1.0	0.0
+STEERING	X steering	3	SLIDER	Z Axis	0	1.0	0.0
+LY	forward left thumb	3	SLIDER	Y Axis	0	1.0	0.0
+LX	X lefth thumb	3	SLIDER	X Axis	0	1.0	0.0
+GAS	Accelerator	3	SLIDER	Y Rotation	0	1.0	0.0
+BRAKE	Brake	3	SLIDER	X Rotation	0	1.0	0.0
+HAT	4 buttons	2	HAT	cooliehat: Hat Switch	0	1.0	0.0
+GO	square button 1	1	BUTTON	Button 0	0	0.0	0.0

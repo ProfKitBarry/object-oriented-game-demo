@@ -1,5 +1,14 @@
 //racing game from a C++ tutorial: https://www.youtube.com/watch?v=KkMZI5Jbf18 
 
+import org.gamecontrolplus.gui.*;
+import org.gamecontrolplus.*;
+import net.java.games.input.*;
+
+ControlIO control;
+ControlDevice stick;
+
+//racing game from a C++ tutorial: https://www.youtube.com/watch?v=KkMZI5Jbf18 
+
 //set some road variables, scaled from 0 to 1
 //we'll use them to multiply by canvas size so they scale to the screen
 float middlePoint = 0.5;
@@ -41,13 +50,46 @@ color roadColor = color(170, 170, 170);
 
 void setup(){
   size(400, 400);
+  
+  surface.setTitle("Testing joystick input");
+  // Initialise the ControlIO
+  control = ControlIO.getInstance(this);
+  // Find a joystick that matches the configuration file. To match with any 
+  // connected device remove the call to filter.
+  stick = control.filter(GCP.STICK).getMatchedDevice("Audio Racer");
+  if (stick == null) {
+    println("No suitable device configured");
+    System.exit(-1); // End the program NOW!
+  }
+  // Setup a function to trap events for this button
+  //stick.getButton("GAS").plug(this, "gas", ControlIO.ON_RELEASE);
+  //stick.getButton("BRAKE").plug(this, "brake", ControlIO.ON_RELEASE);
+  
   noStroke();
   rectMode(CENTER);
   textSize(20);
   createTrack();
 }
 
+// Poll for user input called from the draw() method.
+public void getUserInput() {
+  steering = map(stick.getSlider("STEERING").getValue(), -1, 1, -1, 1);
+  gas = map(stick.getSlider("GAS").getValue(), 0, 1, 0, 1);
+  brake = map(stick.getSlider("BRAKE").getValue(), 0, 1, 0, 1);
+}
+
+//Event handler for the GAS button
+void gas(){
+  getUserInput();
+}
+
+//Event handler for the BRAKE button
+void brake(){
+  getUserInput();
+}
+
 void draw(){
+  getUserInput();
   updatePlayer();
   drawBackground();
   drawRoad();
