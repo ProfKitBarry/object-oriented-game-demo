@@ -1,4 +1,5 @@
 //racing game from a C++ tutorial: https://www.youtube.com/watch?v=KkMZI5Jbf18 
+import processing.sound.*;
 
 import org.gamecontrolplus.gui.*;
 import org.gamecontrolplus.*;
@@ -16,6 +17,8 @@ float targetCurvature; //the curvature of the current track section
 float trackCurveDifference; //for lerping the track to curve
 
 float deltaTime = 0.0002;
+
+Pulse enginePulse; //this is the engine noise, using a pulse generator
 
 float carPosition = 0; //this is the car's L/R position from -1 to 1
 float carDistance = 0; //this is the car's position along the track (Y-ish)
@@ -69,6 +72,10 @@ void setup(){
   rectMode(CENTER);
   textSize(20);
   createTrack();
+  
+  //initilize the pulse generator
+  enginePulse = new Pulse(this);
+  enginePulse.amp(0.1);
 }
 
 // Poll for user input called from the draw() method.
@@ -91,6 +98,7 @@ void brake(){
 void draw(){
   getUserInput();
   updatePlayer();
+  updateAudio();
   drawBackground();
   drawRoad();
   drawPlayer();
@@ -310,4 +318,12 @@ void drawPlayer(){
     rect(position - 20, height - 15, 20, 30);
     rect(position + 20, height - 15, 20, 30);
   }
+}
+
+void updateAudio(){
+  //engine noise frequency is mapped to speed, with a little randomisation
+  //and L/R balance is mapped to car position
+  enginePulse.freq(map(carSpeed + random(-0.05, 0.05), 0, 1, 50, 100));
+  enginePulse.pan(map(carPosition, -1, 1, -1, 1));
+  enginePulse.play();
 }
